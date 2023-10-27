@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form action="/" method="POST" enctype="multipart/form-data">
+        <!-- File Input -->
+        <div class="mb-3">
+            <div class="custom-file">
+                <input type="file" class="custom-file-input" id="file" name="file" multiple>
+                <label class="custom-file-label" for="file">Choose files</label>
+            </div>
+        </div>
+
+        <!-- Selected Files List -->
+        <ul class="list-group mb-3" id="selectedFilesList"></ul>
+
+        <!-- Upload Button -->
+        <div class="mb-3">
+            <button class="btn btn-primary" type="submit">Upload</button>
+        </div>
+    </form>
+    {% if files %}
+        <h5 class="mt-4">Previously Converted Files:</h5>
+        <ul>
+        {% for file in files %}
+        <li><a href="{{ url_for('get_file', filename=file) }}">{{ file }}</a></li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+
+    <script>
+    document.getElementById('file').addEventListener('change', function() {
+        var files = this.files;
+        var filesList = document.getElementById('selectedFilesList');
+        
+        // Clear the list first
+        filesList.innerHTML = '';
+
+        for (var i = 0; i < files.length; i++) {
+            var listItem = document.createElement('li');
+            listItem.className = 'list-group-item';
+
+            // Create checkbox for each file
+            var checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'selectedFiles';
+            checkbox.value = files[i].name;
+            checkbox.checked = true;
+            checkbox.id = 'fileCheckbox' + i;
+
+            // Create label for checkbox
+            var label = document.createElement('label');
+            label.htmlFor = 'fileCheckbox' + i;
+            label.textContent = files[i].name;
+            label.className = 'ml-2';
+
+            // Append checkbox and label to the list item
+            listItem.appendChild(checkbox);
+            listItem.appendChild(label);
+
+            // Append the list item to the files list
+            filesList.appendChild(listItem);
+        }
+    });
+</script>
+
+
+{% endblock %}
