@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM ubuntu:24.10
 
 RUN apt update -y \
     && apt install python3-pip git -y \
